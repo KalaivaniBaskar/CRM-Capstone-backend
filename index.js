@@ -22,8 +22,8 @@ app.use(express.json())
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
 
-// To handle Cross Origin Resource Sharing
-app.use(cors(corsOptions)); 
+// To handle Cross Origin Resource Sharing - allowing sharing
+app.use(cors()); 
 
 //Base Route - Router 
 app.use('/user', userRouter);
