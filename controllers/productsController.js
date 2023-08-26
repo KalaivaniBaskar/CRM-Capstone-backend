@@ -4,9 +4,9 @@ import { Order } from "../models/orderModel.js";
 import { nanoid } from "nanoid";
 import { ORDER_STATUS } from "../config/order_Status.js";
 import { transporter, verifyTransporter } from "../config/mailTransporter.js";
-const client_URL = process.env.CLIENT_URL;
 
 
+// get all available products
 export const getAvlProducts = async(req,res) => {
     try{
     const avlProducts = await Product.find({product_status : PRODUCT_STATUS.Available  });
@@ -21,6 +21,7 @@ export const getAvlProducts = async(req,res) => {
 
 } 
 
+// get orders with req.body criteria 
 export const getOrders = async(req,res) => {
   console.log("get orders,", req.body)
   try{
@@ -41,6 +42,8 @@ export const getOrders = async(req,res) => {
       res.status(500).send({message: "Internal server error", error: error})
     }
 }
+
+// Get all orders from current month and current year 
 export const monthlyOrders = async(req,res) => {
   console.log("get orders monthly and yearly,", req.body)
  
@@ -68,6 +71,104 @@ export const monthlyOrders = async(req,res) => {
     }
 }
 
+// Get revenue from monthwise and yearwise for delivered orders
+
+export const getRevenue = async(req,res) => {
+  console.log("get revenue for month and year,", req.body)
+    
+    try{
+      const d = new Date();
+      let year = d.getFullYear()
+      let month = d.getMonth()+1
+      // const pattern1  = "^" +  String(year) + 
+      //               ( month<10 ? '0'+String(month) : String(month)) + ".*"
+      //  const ordersMonthly = await Order.find({order_date : { $regex : pattern1 }}).sort({order_date: -1})
+       
+       const pattern2  = "^" +  String(year) + ".*"
+       const ordersYearly = await Order.aggregate([
+          {
+            $project : {
+              
+              order_status: 1,
+              order_amount : 1,
+              year : {
+                $substr : [ "$order_date", 0,4]
+              },
+              month : {
+                $substr : [ "$order_date", 4,2]
+              },
+              date : {
+                $substr : [ "$order_date", 6,2]
+              }
+             }
+            },
+          {
+              $match : {
+                 "year" : "2023",
+                 "order_status" : ORDER_STATUS.Delivered
+               }
+             },
+          {
+            $group : {
+              "_id" : "$year",
+              "revenue": {
+                $sum : "$order_amount"
+              },
+              count : { $sum : 1 }
+            }
+          }
+            ])
+      console.log(ordersYearly)
+
+      // get month wise data for a particular year
+       const ordersMonthly = await Order.aggregate([
+          {
+            $project : {
+              
+              order_status: 1,
+              order_amount : 1,
+              year : {
+                $substr : [ "$order_date", 0,4]
+              },
+              month : {
+                $substr : [ "$order_date", 4,2]
+              },
+              date : {
+                $substr : [ "$order_date", 6,2]
+              }
+             }
+            },
+          {
+              $match : {
+                 "year" : "2023",
+                 "order_status" : ORDER_STATUS.Delivered
+               }
+             },
+          {
+            $group : {
+              "_id" : "$month",
+              "revenue": {
+                $sum : "$order_amount"
+              },
+              count : { $sum : 1 }
+            }
+          }
+            ])
+      console.log(ordersMonthly)
+       if(ordersMonthly.length > 0 || ordersYearly.length > 0) {
+        return res.status(200).json({ ordersMonthly, ordersYearly });
+       }
+       else {
+        return res.status(404).json({message : "No requests found"});
+       }
+  }
+  catch(error){
+    console.log(error)
+      res.status(500).send({message: "Internal server error", error: error})
+    }
+}
+
+// cancel an order
 export const cancelOrder = async(req,res) => {
   console.log("cancel order", req.body)
   try{
@@ -89,6 +190,8 @@ export const cancelOrder = async(req,res) => {
       res.status(500).send({message: "Internal server error", error: error})
     }
 }
+
+// update order status
 export const updateOrderStatus = async(req,res) => {
   console.log("cancel order", req.body)
   try{
@@ -112,6 +215,8 @@ export const updateOrderStatus = async(req,res) => {
     }
 }
  
+
+// create new order
 export const handleCreateOrder = async(req,res) => {
   try{
     console.log(req.body)

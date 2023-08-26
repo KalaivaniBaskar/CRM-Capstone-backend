@@ -6,5 +6,5 @@ import { getAvlProducts } from '../controllers/productsController.js';
 
 const router = express.Router();
 
-router.get('/avl-products', getAvlProducts)
+router.get('/avl-products', getAvlProducts) 
 export const productsRouter = router;
