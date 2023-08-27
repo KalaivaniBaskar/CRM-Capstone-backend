@@ -354,6 +354,9 @@ export const updateProfilePic = async(req,res) => {
    try{
     console.log("profile pic")
          const {email, pic_URL, pic_URL_ID} = req.body;
+           
+         if(!email || !pic_URL || !pic_URL_ID)
+         return res.status(400).json({message:"Invalid data"})
 
          const result = await User.findOneAndUpdate(
             {email: email},
@@ -368,7 +371,32 @@ export const updateProfilePic = async(req,res) => {
    catch(error){
     res.status(500).send({message: "Internal server error", error: error})
 } 
-}
+} 
+
+// update Phone  
+export const updatePhone = async(req,res) => { 
+    console.log("update phone")
+    try{
+     console.log("phone ")
+          const {email, phone} = req.body;
+            
+          if(!email || !phone)
+          return res.status(400).json({message:"Invalid data"})
+ 
+          const result = await User.findOneAndUpdate(
+             {email: email},
+             {phone : phone},
+             {new:true}
+          ) 
+          //console.log(result)
+          if(result){
+             res.status(200).json({message: "Phone number updated"})
+          }
+    }
+    catch(error){
+     res.status(500).send({message: "Internal server error", error: error})
+ } 
+ }
 
 //  Delete old pic from Cloudinary
 export const deleteOldPic = async(req,res) => {
