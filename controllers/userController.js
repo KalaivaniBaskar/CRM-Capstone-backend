@@ -45,7 +45,7 @@ export const handleRegisterUser = async(req, res) => {
                 }
             },
             process.env.ACC_VALIDATION_TOKEN_SECRET,
-            { expiresIn: '15m' }
+            { expiresIn: '1h' }
         );
         verifyTransporter();
         const link = `${client_URL}/activate/${result._id}?activateToken=${validateToken}`;
