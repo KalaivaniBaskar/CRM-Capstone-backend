@@ -85,7 +85,7 @@ export const handleLogin = async(req,res) => {
     if (!email || !password) return res.status(400).json({ message: 'Email and password are required.' });
 
     const foundUser = await User.findOne({email : email})
-    console.log(foundUser);
+    //console.log(foundUser);
     if (!foundUser) return res.send(404).json({message: "User not found"}); //Not found 
     // check Activation 
     if( !foundUser.isActivated) return res.status(401).json({message: "User account not activated"}); //Unauthorized 
@@ -389,7 +389,7 @@ export const updatePhone = async(req,res) => {
              {new:true}
           ) 
           //console.log(result)
-          if(result){
+          if(result){           
              res.status(200).json({message: "Phone number updated"})
           }
     }
