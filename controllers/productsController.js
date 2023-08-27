@@ -23,7 +23,7 @@ export const getAvlProducts = async(req,res) => {
 
 // get orders with req.body criteria 
 export const getOrders = async(req,res) => {
-  console.log("get orders,", req.body)
+  console.log("get orders,")
   try{
        if(! req.body)
        return res.status(401).json({message : "Invalid Credentials"});
@@ -45,7 +45,7 @@ export const getOrders = async(req,res) => {
 
 // Get all orders from current month and current year 
 export const monthlyOrders = async(req,res) => {
-  console.log("get orders monthly and yearly,", req.body)
+  console.log("get orders monthly and yearly,")
  
     try{
       const d = new Date();
@@ -72,9 +72,8 @@ export const monthlyOrders = async(req,res) => {
 }
 
 // Get revenue from monthwise and yearwise for delivered orders
-
 export const getRevenue = async(req,res) => {
-  console.log("get revenue for month and year,", req.body)
+  console.log("get revenue for month and year,")
     
     try{
       const d = new Date();
@@ -118,7 +117,7 @@ export const getRevenue = async(req,res) => {
             }
           }
             ])
-      console.log(ordersYearly)
+      //console.log(ordersYearly)
 
       // get month wise data for a particular year
        const ordersMonthly = await Order.aggregate([
@@ -154,7 +153,7 @@ export const getRevenue = async(req,res) => {
             }
           }
             ])
-      console.log(ordersMonthly)
+      //console.log(ordersMonthly)
        if(ordersMonthly.length > 0 || ordersYearly.length > 0) {
         return res.status(200).json({ ordersMonthly, ordersYearly });
        }
@@ -170,7 +169,7 @@ export const getRevenue = async(req,res) => {
 
 // cancel an order
 export const cancelOrder = async(req,res) => {
-  console.log("cancel order", req.body)
+  console.log("cancel order")
   try{
        if(!req.body?.orderID)
        return res.status(401).json({message : "Invalid Credentials"});
@@ -193,14 +192,14 @@ export const cancelOrder = async(req,res) => {
 
 // update order status
 export const updateOrderStatus = async(req,res) => {
-  console.log("cancel order", req.body)
+  console.log("update order")
   try{
        if(!req.body?.orderID)
        return res.status(401).json({message : "Invalid Credentials"});
 
        const result = await Order.findOneAndUpdate({ orderID: req.body.orderID}, 
                       {order_status : req.body.order_status }, {new:true})
-       console.log(result)
+       //console.log(result)
        if(result) {
         return res.status(200).json({ message : "Order status updated"});
        }
@@ -219,19 +218,18 @@ export const updateOrderStatus = async(req,res) => {
 // create new order
 export const handleCreateOrder = async(req,res) => {
   try{
-    console.log(req.body)
+    //console.log(req.body)
     const update_stock = req.body.order_items; 
     const low_stock = []
     try {
-      console.log("update stock", update_stock)
+      console.log("update stock")
     for( let i of update_stock) {
-      console.log("in loop", i)
       const result = await Product.findOneAndUpdate(
                 { "product_ID" : i.product_ID},
                 { $inc : { "product_stock": -(i.qty) }},
                 {new:true}
       )
-      console.log(result) 
+      //console.log(result) 
       if(result.product_stock <= 10) {
         low_stock.push(result.product_ID)
       } 

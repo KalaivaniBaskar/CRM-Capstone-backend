@@ -12,7 +12,7 @@ export const createRequest = async(req,res) => {
     if(!req.body.orderID)
      return res.status(401).json({message : "Invalid Data"});
         try{
-         console.log("new request", req.body)
+         console.log("new request")
          const id = nanoid(12)
          const requestID = 'SR-'+id 
          const createRequest = new Request({ ...req.body, requestID : requestID}) 
@@ -58,7 +58,7 @@ export const createRequest = async(req,res) => {
 
 // get all requests of a customer or engineer ? 
 export const getRequests = async(req,res) => {
-    console.log("get req", req.body)
+    console.log("get request")
   try{
     if(! req.body)
        return res.status(401).json({message : "Invalid Data"});
@@ -80,7 +80,7 @@ export const getRequests = async(req,res) => {
 
 // get all requests of a Admin
 export const getAllRequests = async(req,res) => {
-  console.log("get all req", req.body)
+  console.log("get all req monthly yearly")
 try{
     const d = new Date();
     let year = d.getFullYear()
@@ -116,7 +116,7 @@ export const updateRequest = async(req,res) => {
         
        const result = await Request.findOneAndUpdate({requestID: req.body.requestID},
                     {request_status: req.body.request_status, request_engg: req.body.request_engg }, {new:true}) 
-        console.log(result)
+        //console.log(result)
         if(result)
         return res.status(200).json({result});
         else {
@@ -139,7 +139,7 @@ export const updateSummary = async(req,res) => {
         
        const result = await Request.findOneAndUpdate({requestID: req.body.requestID},
                     {request_summary: req.body.request_summary, request_engg: req.body.request_engg }, {new:true}) 
-        console.log(result)
+        //console.log(result)
         if(result)
         return res.status(200).json({result});
         else {

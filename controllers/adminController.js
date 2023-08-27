@@ -14,10 +14,10 @@ export const handleAddProduct = async(req, res) => {
         const {product} = req.body;
         const id = nanoid(7);
         const product_ID = product.product_type + "-" + id
-        console.log("handleprod",req.body) 
+        console.log("handle addprod") 
         const newProduct = new Product({...product, product_ID})
         const result = await newProduct.save();
-        console.log(result)
+        //console.log(result)
         if( result)
         res.status(200).json({message:"ok"});
         else
@@ -33,9 +33,9 @@ export const handleAddEmployee = async(req, res) => {
 
 console.log("adding new employee")
     try{ 
-        console.log(req.body)
+        //console.log(req.body)
         const {new_User } = req.body; 
-        console.log(new_User)
+        //console.log(new_User)
         if(!new_User){
             res.status(400).send({message: "Employee Details not received"})
         }
@@ -65,7 +65,6 @@ console.log("adding new employee")
                 { expiresIn: '15m' }
             );
             verifyTransporter();
-            console.log(result)
             const link = `${client_URL}/activate/${result._id}?activateToken=${validateToken}`;
             const mailOptions = {
               from: process.env.MAIL_ID,

@@ -278,7 +278,7 @@ export const forgotPassword = async(req,res) => {
 export const authorizePwdReset = async(req,res) => {
     try{
         const {id,token} = req.params; 
-        console.log(id, token, "auth reset link")
+        console.log( "authorize reset link")
 
         if(!id || !token){
             return res.status(400).json({message:"Invalid link"})
@@ -313,7 +313,7 @@ export const resetPassword = async(req,res) => {
     try{
         const {id,token} = req.params; 
         const password = req.body.password;
-        console.log(id, token, req.body, "pwd reset link")
+        console.log( "pwd reset link")
 
         if(!id || !token){
             return res.status(400).json({message:"Invalid link"})
@@ -360,7 +360,7 @@ export const updateProfilePic = async(req,res) => {
             {pic_URL : pic_URL, pic_URL_ID: pic_URL_ID},
             {new:true}
          ) 
-         console.log(result)
+         //console.log(result)
          if(result){
             res.status(200).json({message: "Profile Pic updated"})
          }
@@ -374,7 +374,7 @@ export const updateProfilePic = async(req,res) => {
 export const deleteOldPic = async(req,res) => {
     console.log("cloudinary")
     const {public_id} = req.query
-    console.log( req.query, public_id);
+    //console.log( req.query, public_id);
     const imgID = public_id;
     try{
     const response = await cloudinary.uploader.destroy(imgID)
