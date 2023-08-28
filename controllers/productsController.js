@@ -170,7 +170,6 @@ export const getRevenue = async(req,res) => {
           {
               $match : {
                  "year" : year,
-                 "month": month,
                  "order_status" : ORDER_STATUS.Delivered
                }
              },
