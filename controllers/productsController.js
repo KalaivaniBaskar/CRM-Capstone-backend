@@ -74,16 +74,11 @@ export const monthlyOrders = async(req,res) => {
 // Get revenue from monthwise and yearwise for delivered orders
 export const getRevenue = async(req,res) => {
   console.log("get revenue for month and year,")
-    
+    if(! req.body)
+    return res.status(401).json({message : "Invalid Data"});
     try{
-      const d = new Date();
-      let year = d.getFullYear()
-      let month = d.getMonth()+1
-      // const pattern1  = "^" +  String(year) + 
-      //               ( month<10 ? '0'+String(month) : String(month)) + ".*"
-      //  const ordersMonthly = await Order.find({order_date : { $regex : pattern1 }}).sort({order_date: -1})
-       
-       const pattern2  = "^" +  String(year) + ".*"
+       const {month, year } = req.body
+     
        const ordersYearly = await Order.aggregate([
           {
             $project : {
@@ -101,12 +96,13 @@ export const getRevenue = async(req,res) => {
               }
              }
             },
-          {
+           {
               $match : {
-                 "year" : "2023",
+                 "year" : year,
                  "order_status" : ORDER_STATUS.Delivered
                }
              },
+
           {
             $group : {
               "_id" : "$year",
@@ -118,6 +114,40 @@ export const getRevenue = async(req,res) => {
           }
             ])
       //console.log(ordersYearly)
+       const ordersAllYearly = await Order.aggregate([
+          {
+            $project : {
+              
+              order_status: 1,
+              order_amount : 1,
+              year : {
+                $substr : [ "$order_date", 0,4]
+              },
+              month : {
+                $substr : [ "$order_date", 4,2]
+              },
+              date : {
+                $substr : [ "$order_date", 6,2]
+              }
+             }
+            },
+           {
+              $match : {
+                 "order_status" : ORDER_STATUS.Delivered
+               }
+             },
+
+          {
+            $group : {
+              "_id" : "$year",
+              "revenue": {
+                $sum : "$order_amount"
+              },
+              count : { $sum : 1 }
+            }
+          }
+            ])
+      //console.log(ordersAllYearly)
 
       // get month wise data for a particular year
        const ordersMonthly = await Order.aggregate([
@@ -139,7 +169,8 @@ export const getRevenue = async(req,res) => {
             },
           {
               $match : {
-                 "year" : "2023",
+                 "year" : year,
+                 "month": month,
                  "order_status" : ORDER_STATUS.Delivered
                }
              },
@@ -154,8 +185,8 @@ export const getRevenue = async(req,res) => {
           }
             ])
       //console.log(ordersMonthly)
-       if(ordersMonthly.length > 0 || ordersYearly.length > 0) {
-        return res.status(200).json({ ordersMonthly, ordersYearly });
+       if(ordersMonthly.length > 0 || ordersYearly.length > 0 || || ordersAllYearly.length > 0) {
+        return res.status(200).json({ ordersMonthly, ordersYearly, ordersAllYearly});
        }
        else {
         return res.status(404).json({message : "No requests found"});
