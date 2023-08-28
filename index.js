@@ -9,6 +9,7 @@ import { adminRouter } from './routes/admin.js'
 import { productsRouter } from './routes/products.js'
 import { ordersRouter } from './routes/orders.js'
 import { requestRouter } from './routes/requests.js'
+import { leadsRouter } from './routes/leads.js'
 
 const PORT = process.env.PORT || 3500;
 const app = express();
@@ -31,6 +32,7 @@ app.use('/admin', adminRouter);
 app.use('/products', productsRouter)
 app.use('/orders', ordersRouter)
 app.use('/request', requestRouter)
+app.use('/leads', leadsRouter)
 
 
 // Listening to server

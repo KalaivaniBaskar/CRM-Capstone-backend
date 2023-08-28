@@ -14,8 +14,8 @@ router.post('/cancel-order', verifyAccessToken, verifyRolePermission(USER_ROLES.
 
 router.post('/update-order', verifyAccessToken, verifyRolePermission( USER_ROLES.Sales, USER_ROLES.Admin),  updateOrderStatus )
 
-router.post('/monthly-orders', verifyAccessToken, verifyRolePermission( USER_ROLES.Sales, USER_ROLES.Admin),  monthlyOrders ) 
+router.post('/monthly-orders', verifyAccessToken, verifyRolePermission( USER_ROLES.Sales, USER_ROLES.Admin, USER_ROLES.Marketing),  monthlyOrders ) 
 
-router.post('/get-revenue', verifyAccessToken, verifyRolePermission( USER_ROLES.Sales, USER_ROLES.Admin),  getRevenue ) 
+router.post('/get-revenue', verifyAccessToken, verifyRolePermission( USER_ROLES.Sales, USER_ROLES.Admin, USER_ROLES.Marketing),  getRevenue ) 
 
 export const ordersRouter = router;
