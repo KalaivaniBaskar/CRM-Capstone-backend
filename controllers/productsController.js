@@ -185,7 +185,7 @@ export const getRevenue = async(req,res) => {
           }
             ])
       //console.log(ordersMonthly)
-       if(ordersMonthly.length > 0 || ordersYearly.length > 0 || || ordersAllYearly.length > 0) {
+       if(ordersMonthly.length > 0 || ordersYearly.length > 0  || ordersAllYearly.length > 0) {
         return res.status(200).json({ ordersMonthly, ordersYearly, ordersAllYearly});
        }
        else {
