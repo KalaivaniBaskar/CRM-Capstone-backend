@@ -2,7 +2,7 @@ import express from 'express';
 import { verifyRolePermission } from '../middleware/verifyRolePermission.js';
 import { USER_ROLES } from '../config/user_Roles.js';
 import { verifyAccessToken } from '../middleware/verifyAccessToken.js';
-import { cancelOrder, getOrders, getRevenue, handleCreateOrder, monthlyOrders, updateOrderStatus } from '../controllers/productsController.js';
+import { cancelOrder, getOrders, getProductSold, getRevenue, handleCreateOrder, monthlyOrders, updateOrderStatus } from '../controllers/productsController.js';
 
 const router = express.Router();
 
@@ -18,4 +18,5 @@ router.post('/monthly-orders', verifyAccessToken, verifyRolePermission( USER_ROL
 
 router.post('/get-revenue', verifyAccessToken, verifyRolePermission( USER_ROLES.Sales, USER_ROLES.Admin, USER_ROLES.Marketing),  getRevenue ) 
 
+router.post('/get-products-data', verifyAccessToken, verifyRolePermission(USER_ROLES.Marketing, USER_ROLES.Admin, USER_ROLES.Sales), getProductSold )
 export const ordersRouter = router;

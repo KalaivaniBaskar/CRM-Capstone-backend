@@ -322,3 +322,39 @@ export const handleCreateOrder = async(req,res) => {
       }
 }
 
+
+// get all products sold count- category wise 
+export const getProductSold = async(req,res) => {
+  try{
+    console.log(req.body)
+    const productsSold = await Order.aggregate([
+      {
+        $project : {
+            order_status : 1,
+           order_items : 1, 
+           order_date : 1,
+           products : {
+             $substr : ["order_items.product_ID" , 0,2]
+           },
+           year : {
+            $substr : [ "$order_date", 0,4]
+          }   
+        }
+      },
+      {
+        $match : {
+          "order_status" : ORDER_STATUS.Delivered, 
+          "order_date" : { $regex : req.body.year },
+        "order_items.product_ID" : { $regex : /^KC.*/ }
+        }
+      }
+     
+    ])
+    if(productsSold)
+       res.status(200).json(productsSold)
+  }
+  catch(error){
+    console.log(error)
+      res.status(500).send({message: "Internal server error", error: error})
+    }
+}
