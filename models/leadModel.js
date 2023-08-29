@@ -3,8 +3,14 @@ import { LEAD_STATUS } from '../config/lead_status.js';
 
 const LEAD_STATUS_VALUES = Object.values(LEAD_STATUS);
 
-const userSchema = new mongoose.Schema(
+const leadSchema = new mongoose.Schema(
         {
+        lead_id: {
+            type: String,
+            unique: true,
+            required: true,
+            trim: true,
+        },
         lead_name: {
             type: String,
             required: true,
@@ -12,7 +18,11 @@ const userSchema = new mongoose.Schema(
         },
         lead_email: {
             type: String,
-            required: true,
+            unique: true,
+            trim: true,
+        },
+        lead_phone: {
+            type: String,
             unique: true,
             trim: true,
         },
@@ -43,4 +53,4 @@ const userSchema = new mongoose.Schema(
         { timestamps: true }
   );
   
-  export const User = mongoose.model("user", userSchema);
+  export const Lead = mongoose.model("lead", leadSchema);

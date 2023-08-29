@@ -369,7 +369,8 @@ export const getProductSold = async(req,res) => {
       {
         $group : {
           "_id" : "$order_status",
-          "count" : { $sum : "$order_qty"}
+          "count" : { $sum : "$order_qty"},
+          "amount" : { $sum : "$order_amount"},
         }
       }
      
@@ -395,12 +396,13 @@ export const getProductSold = async(req,res) => {
       {
         $group : {
           "_id" : "$order_status",
-          "count" : { $sum : "$order_qty"}
+          "count" : { $sum : "$order_qty"},
+          "amount" : { $sum : "$order_amount"},
         }
       }
      
     ]) 
-    console.log(productsCancelled, productsSoldCount)
+    //console.log(productsCancelled, productsSoldCount)
     if(productsSold.length > 0 || productsSoldCount.length > 0 || productsCancelled.length > 0 ) {
        return res.status(200).json({productsSold , productsSoldCount, productsCancelled})
       }
