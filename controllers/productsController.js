@@ -334,7 +334,7 @@ export const getProductSold = async(req,res) => {
            order_items : 1, 
            order_date : 1,
            products : {
-             $substr : ["order_items.product_ID" , 0,2]
+             $substr : ["$order_items.product_ID" , 0,2]
            },
            year : {
             $substr : [ "$order_date", 0,4]
@@ -345,7 +345,6 @@ export const getProductSold = async(req,res) => {
         $match : {
           "order_status" : ORDER_STATUS.Delivered, 
           "order_date" : { $regex : req.body.year },
-        "order_items.product_ID" : { $regex : /^KC.*/ }
         }
       }
      
