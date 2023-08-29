@@ -12,8 +12,8 @@ export const getLeads = async(req,res) => {
         //  if(! req.body)
         //  return res.status(401).json({message : "Invalid Credentials"});
   
-         const leadsList = await Lead.find(req.body).sort({lead_created: -1})
-         console.log(leadsList)
+         const leadsList = await Lead.find({}, {}).sort({lead_created: -1})
+         //console.log(leadsList)
          if(leadsList.length > 0) {
           return res.status(200).json({ leadsList });
          }
