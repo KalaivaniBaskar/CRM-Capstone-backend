@@ -331,8 +331,9 @@ export const getProductSold = async(req,res) => {
       {
         $project : {
             order_status : 1,
-           order_items : 1, 
+            order_items : 1, 
            order_date : 1,
+           order_qty : 1,
            year : {
             $substr : [ "$order_date", 0,4]
           }   
