@@ -1,6 +1,5 @@
 import { nanoid } from 'nanoid' ;
 import { Lead } from "../models/leadModel.js"
-import { nanoid } from "nanoid";
 import dotenv from 'dotenv'
 dotenv.config()
 import { transporter, verifyTransporter } from "../config/mailTransporter.js";
@@ -31,7 +30,7 @@ export const getLeads = async(req,res) => {
 
   // add new lead : 
   export const addNewLead = async(req,res) => {
-    console.log("get leads,")
+    console.log("add new lead", req.body)
     try{
          if(! req.body)
          return res.status(401).json({message : "No data provided"});
