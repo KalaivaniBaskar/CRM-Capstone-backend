@@ -344,6 +344,12 @@ export const getProductSold = async(req,res) => {
           "order_status" : ORDER_STATUS.Delivered, 
           "order_date" : { $regex : req.body.year },
         }
+      },
+      {
+        $group : {
+          "_id" : "$order_status",
+          "count" : { $sum : "$order_qty"}
+        }
       }
      
     ])
