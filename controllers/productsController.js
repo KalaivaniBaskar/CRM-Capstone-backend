@@ -399,7 +399,8 @@ export const getProductSold = async(req,res) => {
         }
       }
      
-    ])
+    ]) 
+    console.log(productsCancelled, productsSoldCount)
     if(productsSold.length > 0 || productsSoldCount.length > 0 || productsCancelled.length > 0 ) {
        return res.status(200).json({productsSold , productsSoldCount, productsCancelled})
       }
