@@ -401,7 +401,7 @@ export const getProductSold = async(req,res) => {
      
     ])
     if(productsSold.length > 0 || productsSoldCount.length > 0 || productsCancelled.length > 0 ) {
-       return res.status(200).json(productsSold , productsSoldCount, productsCancelled)
+       return res.status(200).json({productsSold , productsSoldCount, productsCancelled})
       }
       else {
         return res.status(400).json({message: "no data found"})
