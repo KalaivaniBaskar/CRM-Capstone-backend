@@ -344,6 +344,27 @@ export const getProductSold = async(req,res) => {
           "order_status" : ORDER_STATUS.Delivered, 
           "order_date" : { $regex : req.body.year },
         }
+      }
+     
+    ])
+
+    const productsSoldCount = await Order.aggregate([
+      {
+        $project : {
+            order_status : 1,
+            order_items : 1, 
+           order_date : 1,
+           order_qty : 1,
+           year : {
+            $substr : [ "$order_date", 0,4]
+          }   
+        }
+      },
+      {
+        $match : {
+          "order_status" : ORDER_STATUS.Delivered, 
+          "order_date" : { $regex : req.body.year },
+        }
       },
       {
         $group : {
@@ -353,9 +374,39 @@ export const getProductSold = async(req,res) => {
       }
      
     ])
-    if(productsSold)
-       res.status(200).json(productsSold)
-  }
+    const productsCancelled = await Order.aggregate([
+      {
+        $project : {
+            order_status : 1,
+            order_items : 1, 
+           order_date : 1,
+           order_qty : 1,
+           year : {
+            $substr : [ "$order_date", 0,4]
+          }   
+        }
+      },
+      {
+        $match : {
+          "order_status" : ORDER_STATUS.Cancelled, 
+          "order_date" : { $regex : req.body.year },
+        }
+      },
+      {
+        $group : {
+          "_id" : "$order_status",
+          "count" : { $sum : "$order_qty"}
+        }
+      }
+     
+    ])
+    if(productsSold.length > 0 || productsSoldCount.length > 0 || productsCancelled.length > 0 ) {
+       return res.status(200).json(productsSold , productsSoldCount, productsCancelled)
+      }
+      else {
+        return res.status(400).json({message: "no data found"})
+      }
+      }
   catch(error){
     console.log(error)
       res.status(500).send({message: "Internal server error", error: error})
