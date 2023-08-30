@@ -28,6 +28,32 @@ export const getLeads = async(req,res) => {
       }
   } 
 
+// update lead
+export const updateLead = async(req,res) => {
+    console.log("update lead")
+
+    try{
+         if(! req.body || !req.body.lead_id)
+         return res.status(401).json({message : "Invalid Request"});
+         
+         const { lead_id, ...setlead} = req.body 
+         const updateLead = await Lead.findOneAndUpdate({lead_id }, {setlead}, {new:true})
+         console.log(updateLead)
+
+         if(updateLead) {
+          return res.status(200).json({ message : "Update lead info" });
+         }
+         else {
+          return res.status(404).json({message : "No leads found"});
+         }
+  
+      }
+    catch(error){
+      console.log(error)
+        res.status(500).send({message: "Internal server error", error: error})
+      }
+  } 
+
   // add new lead : 
   export const addNewLead = async(req,res) => {
     console.log("add new lead", req.body)
