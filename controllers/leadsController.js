@@ -38,7 +38,7 @@ export const updateLead = async(req,res) => {
          
          const { lead_id, ...setlead} = req.body  
          console.log(lead_id, setlead)
-         const updateLead = await Lead.findOneAndUpdate({...lead_id }, {...setlead}, {new:true})
+         const updateLead = await Lead.findOneAndUpdate({lead_id : lead_id }, setlead, {new:true})
          console.log(updateLead)
 
          if(updateLead) {
