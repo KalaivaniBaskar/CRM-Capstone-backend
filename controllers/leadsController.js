@@ -41,7 +41,7 @@ export const updateLead = async(req,res) => {
          console.log(updateLead)
 
          if(updateLead) {
-          return res.status(200).json({ message : "Update lead info" });
+          return res.status(200).json({ message : "Update lead info" , lead_id: updateLead.lead_id});
          }
          else {
           return res.status(404).json({message : "No leads found"});

@@ -2,7 +2,7 @@ import express from 'express';
 import { verifyRolePermission } from '../middleware/verifyRolePermission.js';
 import { USER_ROLES } from '../config/user_Roles.js';
 import { verifyAccessToken } from '../middleware/verifyAccessToken.js';
-import { addNewLead, getLeads } from '../controllers/leadsController.js';
+import { addNewLead, getLeads, updateLead } from '../controllers/leadsController.js';
 
 const router = express.Router();
 
