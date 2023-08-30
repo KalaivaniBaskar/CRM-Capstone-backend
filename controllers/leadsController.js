@@ -37,9 +37,8 @@ export const updateLead = async(req,res) => {
          return res.status(401).json({message : "Invalid Request"});
          
          const { lead_id, ...setlead} = req.body  
-         console.log(lead_id, setlead)
          const updateLead = await Lead.findOneAndUpdate({lead_id : lead_id }, setlead, {new:true})
-         console.log(updateLead)
+         //console.log(updateLead)
 
          if(updateLead) {
           return res.status(200).json({ message : "Update lead info" , lead_id: updateLead.lead_id});
